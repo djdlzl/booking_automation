@@ -117,51 +117,6 @@ def booking_process(driver, wait):
     except:
         print("실패")
 
-def execute_booking_in_all_frames(driver, wait):
-    """
-    모든 iframe에서 booking_process를 실행하는 함수
-    """
-    # 메인 프레임에서 실행
-    try:
-        print("메인 프레임에서 시도")
-        booking_process(driver, wait)
-    except Exception as e:
-        print(f"메인 프레임 실행 중 오류: {e}")
-
-    # 모든 iframe 찾기
-    iframes = driver.find_elements(By.TAG_NAME, "iframe")
-    print(f"총 {len(iframes)}개의 iframe을 발견했습니다.")
-
-    # 각 iframe에서 실행
-    for i in range(len(iframes)):
-        try:
-            # iframe으로 전환
-            driver.switch_to.frame(i)
-            print(f"iframe {i}로 전환")
-            
-            # booking_process 실행
-            booking_process(driver, wait)
-            
-        except Exception as e:
-            print(f"iframe {i}에서 오류 발생: {e}")
-        
-        finally:
-            # 항상 기본 컨텍스트로 돌아가기
-            driver.switch_to.default_content()
-
-def wait_for_page_load(wait, element):
-    try:
-        # DOM이 완전히 로드될 때까지 대기
-        wait.until(lambda driver: driver.execute_script("return document.readyState") == "complete")
-        
-        # 특정 요소가 보일 때까지 추가로 대기
-        key_element = wait.until(EC.presence_of_element_located((By.XPATH, element)))
-        
-        return True
-    except Exception as e:
-        print("페이지 로딩 시간 초과")
-        return False
-
 
 # 메인 로직
 def main_booking():
